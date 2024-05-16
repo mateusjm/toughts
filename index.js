@@ -13,6 +13,56 @@ const app = express()
 // importando conexão
 const conn = require('./db/conn')
 
+// definindo template engine
+app.engine('handlebars', exphbs.engine())
+app.set('view engine', 'handlebars')
+
+// receber resposta do body
+app.use(
+    express.urlencoded({
+        extended: true
+    })
+)
+
+app.use(express.json)
+
+// session middleware
+app.use(
+    session({
+        name: 'session',
+        secret: 'nosso_secret',
+        resave: false,
+        saveUninitialized: false,
+        store: new FileStore({
+            logFn: function() {},
+            path: require('path').join(require('os').tmpdir(), 'sessions')
+        }),
+        cookie: {
+            secure: false,
+            maxAge: 360000,
+            expires: new Date(Date.now() + 360000),
+            httpOnly: true
+        }
+    })
+)
+
+// configuração flash messages
+app.use(flash())
+
+// uso de arquivo estáticos
+app.use(express.static('public'))
+
+// configurar sessão na resposta
+app.use((req, res, next)=> {
+
+    if(req.session.userid) {
+        res.locals.session = req.session
+    }
+
+    next()
+})
+
+
 // criando conexão no índice
 conn
     .sync()
