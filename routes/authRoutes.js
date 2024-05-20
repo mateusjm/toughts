@@ -8,6 +8,7 @@ const AuthContoller = require('../controllers/AuthController')
 // rotas
 router.get('/login', AuthContoller.login)
 router.get('/register', AuthContoller.register)
+router.post('/register', AuthContoller.registerPost)
 
 // exportando router
 module.exports = router
