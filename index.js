@@ -17,6 +17,12 @@ const conn = require('./db/conn')
 const Tought = require('./models/Tought')
 const User = require('./models/User')
 
+// importando routes
+const toughtsRoutes = require('./routes/toughtsRoutes')
+
+// importando controller
+const ToughtController = require('./controllers/ToughtController')
+
 // definindo template engine
 app.engine('handlebars', exphbs.engine())
 app.set('view engine', 'handlebars')
@@ -28,7 +34,7 @@ app.use(
     })
 )
 
-app.use(express.json)
+// app.use(express.json)
 
 // session middleware
 app.use(
@@ -39,7 +45,7 @@ app.use(
         saveUninitialized: false,
         store: new FileStore({
             logFn: function() {},
-            path: require('path').join(require('os').tmpdir(), 'sessions')
+            path: require('path').join(require('os').tmpdir(), 'sessions'),
         }),
         cookie: {
             secure: false,
@@ -66,10 +72,14 @@ app.use((req, res, next)=> {
     next()
 })
 
+// Routes
+app.use('/toughts', toughtsRoutes)
+
+// acessando todos os pensamentos pela barra
+app.get('/', ToughtController.showToughts)
 
 // criando conexão no índice
 conn
-    //.sync({force: true})
     .sync()
     .then(()=> {
         app.listen(3000)
