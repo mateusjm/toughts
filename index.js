@@ -13,6 +13,10 @@ const app = express()
 // importando conexão
 const conn = require('./db/conn')
 
+// importando models
+const Tought = require('./models/Tought')
+const User = require('./models/User')
+
 // definindo template engine
 app.engine('handlebars', exphbs.engine())
 app.set('view engine', 'handlebars')
@@ -65,6 +69,7 @@ app.use((req, res, next)=> {
 
 // criando conexão no índice
 conn
+    //.sync({force: true})
     .sync()
     .then(()=> {
         app.listen(3000)
