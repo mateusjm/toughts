@@ -6,9 +6,46 @@ const bcrypt = require('bcryptjs')
 
 module.exports = class AuthContoller {
 
-    // rederizar login
+    // renderizar login
     static login(req, res) {
         res.render('auth/login')
+    }
+
+    // criar formulário login
+    static async loginPost(req, res) {
+        
+        const {email, password} = req.body
+
+        // encontrar usuário
+        const user = await User.findOne({ where: {email: email}})
+
+        if(!user) {
+            req.flash('message', 'Usuário não encontrado!')
+            res.redirect('/login')
+
+            return
+        }
+
+        // verificar se as senhas correspondem
+        const passwordMatch = bcrypt.compareSync(password, user.password)
+
+        if(!passwordMatch) {
+            req.flash('message', 'Senha inválida!')
+            res.redirect('/login')
+
+            return
+        }
+
+        // inicializar a sessão
+        req.session.userid = user.id
+
+        req.flash('message', 'Autenticação realizada com sucesso!')
+
+        // salvar sessão
+        req.session.save(()=> {
+            res.redirect('/') 
+        })
+
     }
 
     // renderizar register
@@ -16,7 +53,7 @@ module.exports = class AuthContoller {
         res.render('auth/register')
     }
 
-    // criar register
+    // criar formulário register
     static async registerPost(req, res) {
 
         const {name, email, password, confirmpassword} = req.body
