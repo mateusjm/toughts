@@ -69,4 +69,10 @@ module.exports = class AuthContoller {
         
     }
 
+    // sair da dashboard
+    static logout(req, res) {
+        req.session.destroy()
+        res.redirect('/login')
+    }
+
 }
