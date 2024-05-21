@@ -7,6 +7,7 @@ const AuthContoller = require('../controllers/AuthController')
 
 // rotas
 router.get('/login', AuthContoller.login)
+router.post('/login', AuthContoller.loginPost)
 router.get('/register', AuthContoller.register)
 router.post('/register', AuthContoller.registerPost)
 router.get('/logout', AuthContoller.logout)
