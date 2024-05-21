@@ -9,6 +9,7 @@ const AuthContoller = require('../controllers/AuthController')
 router.get('/login', AuthContoller.login)
 router.get('/register', AuthContoller.register)
 router.post('/register', AuthContoller.registerPost)
+router.get('/logout', AuthContoller.logout)
 
 // exportando router
 module.exports = router
