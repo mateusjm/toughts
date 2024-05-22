@@ -19,4 +19,28 @@ module.exports = class ToughtController {
         res.render('toughts/create')
     }
 
+    // inserção de pensamentos no banco de dados
+    static async createToughtsSave(req, res) {
+    
+        const tought = {
+            title: req.body.title,
+            UserId: req.session.userid
+        }
+
+        try {
+
+            await Tought.create(tought)
+            req.flash('message', 'Parabéns! Pensamento criado com sucesso!')
+
+            // garantindo que a requisição foi salva e redirecionamos
+            req.session.save(()=> {
+                res.redirect('/toughts/dashboard')
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
 }
