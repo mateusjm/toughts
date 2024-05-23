@@ -11,7 +11,26 @@ module.exports = class ToughtController {
 
     // renderizar dashboard
     static async dashboard(req, res) {
-        res.render('toughts/dashboard')
+        const userId = req.session.userid
+
+        const user = await User.findOne({
+            where: {
+                id: userId
+            },
+            include: Tought,
+            plain: true
+        })
+
+        // caso usuário não exista
+        if(!user) {
+            res.redirect('/login')
+        }
+        
+        // destruindo outras propriedades de user.Toughts e pegando só dataValues 
+        const toughts = user.Toughts.map((result)=> result.dataValues)
+        console.log(toughts)
+
+        res.render('toughts/dashboard', {toughts})
     }
 
     // renderizar criação de pensamentos
