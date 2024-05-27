@@ -12,6 +12,7 @@ const checkAuth = require('../helpers/auth').checkAuth
 router.get('/add', checkAuth, ToughtController.createToughts)
 router.post('/add', checkAuth, ToughtController.createToughtsSave)
 router.get('/dashboard', checkAuth, ToughtController.dashboard)
+router.post('/remove', checkAuth, ToughtController.removeToughtSave)
 router.get('/', ToughtController.showToughts)
 
 // exportando router
