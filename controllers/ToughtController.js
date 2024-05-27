@@ -1,4 +1,5 @@
 // importando pacotes
+const { where } = require('sequelize')
 const Tought = require('../models/Tought')
 const User = require('../models/User')
 
@@ -53,6 +54,26 @@ module.exports = class ToughtController {
 
             // garantindo que a requisição foi salva e redirecionamos
             req.session.save(()=> {
+                res.redirect('/toughts/dashboard')
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+    static async removeToughtSave(req, res) {
+
+        const id = req.body.id
+        const UserId = req.session.userid
+
+        try {
+            await Tought.destroy({where: {id: id, UserId: UserId}})
+            req.flash('message', 'Pensamento removido com suceso!')
+
+            // salvando e redirecionando
+            req.session.save(() => {
                 res.redirect('/toughts/dashboard')
             })
 
