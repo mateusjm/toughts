@@ -29,9 +29,16 @@ module.exports = class ToughtController {
         
         // destruindo outras propriedades de user.Toughts e pegando só dataValues 
         const toughts = user.Toughts.map((result)=> result.dataValues)
-        console.log(toughts)
+        
+        // identificando se há pensamentos
+        let emptyToughts = false
 
-        res.render('toughts/dashboard', {toughts})
+        // se toughts não tiver pensamentos, ele recebe a mensagem vazia
+        if(toughts.length === 0) {
+            emptyToughts = true
+        }
+
+        res.render('toughts/dashboard', {toughts, emptyToughts})
     }
 
     // renderizar criação de pensamentos
@@ -63,7 +70,8 @@ module.exports = class ToughtController {
 
     }
 
-    static async removeToughtSave(req, res) {
+    // remover pensamentos
+    static async removeToughtsSave(req, res) {
 
         const id = req.body.id
         const UserId = req.session.userid
