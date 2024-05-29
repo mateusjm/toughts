@@ -91,4 +91,40 @@ module.exports = class ToughtController {
 
     }
 
+    // editar pensamentos
+    static async updateTought(req, res) {
+        const id = req.params.id
+
+        const tought = await Tought.findOne({ where: {id: id}, raw: true})
+
+        console.log(tought)
+
+        res.render('toughts/edit', {tought})
+
+    }
+
+    static async updateToughtSave(req, res) {
+
+        const id = req.body.id
+        console.log(id)
+
+        const tought = {
+            title: req.body.title
+        }
+
+        try {
+            await Tought.update(tought, {where: {id: id}})
+            req.flash('message', 'Pensamento atualizado com suceso!')
+
+            // salvando e redirecionando
+            req.session.save(() => {
+                res.redirect('/toughts/dashboard')
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
 }
