@@ -14,7 +14,6 @@ module.exports = class ToughtController {
         })
 
         const toughts = toughtsData.map((result)=> result.get({plain: true}))
-        console.log(toughts)
 
         res.render('toughts/home', {toughts})
     }
