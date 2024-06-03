@@ -18,6 +18,7 @@ const Tought = db.define('Tought', {
 
 // definindo Tought como pertencente a User
 Tought.belongsTo(User)
+// Usuário possui muitos pensamentos
 User.hasMany(Tought)
 
 // exportando Tought

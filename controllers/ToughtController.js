@@ -7,7 +7,16 @@ module.exports = class ToughtController {
 
     // renderizar todos pensamentos
     static async showToughts(req, res) {
-        res.render('toughts/home')
+
+        // resgatando dados sem filtro
+        const toughtsData = await Tought.findAll({
+            include: User,
+        })
+
+        const toughts = toughtsData.map((result)=> result.get({plain: true}))
+        console.log(toughts)
+
+        res.render('toughts/home', {toughts})
     }
 
     // renderizar dashboard
