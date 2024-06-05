@@ -3,19 +3,38 @@ const { where } = require('sequelize')
 const Tought = require('../models/Tought')
 const User = require('../models/User')
 
+// operador
+const { Op } = require('sequelize')
+
 module.exports = class ToughtController {
 
     // renderizar todos pensamentos
     static async showToughts(req, res) {
 
+        let search = ''
+
+        if(req.query.search) {
+            search = req.query.search
+        }
+
         // resgatando dados sem filtro
         const toughtsData = await Tought.findAll({
             include: User,
+            where: {
+                title: {[Op.like]: `%${search}%`}
+            }
         })
 
+        // limpar os dados do array e pegar somente os pensamentos
         const toughts = toughtsData.map((result)=> result.get({plain: true}))
 
-        res.render('toughts/home', {toughts})
+        let toughtsQty = toughts.length
+
+        if(toughtsQty === 0) {
+            toughtsQty = false
+        }
+
+        res.render('toughts/home', {toughts, search, toughtsQty})
     }
 
     // renderizar dashboard
