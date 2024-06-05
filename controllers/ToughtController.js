@@ -17,12 +17,21 @@ module.exports = class ToughtController {
             search = req.query.search
         }
 
+        let order = 'DESC'
+
+        if(req.query.order === 'old') {
+            order = 'ASC'
+        } else {
+            order = 'DESC'
+        }
+
         // resgatando dados sem filtro
         const toughtsData = await Tought.findAll({
             include: User,
             where: {
                 title: {[Op.like]: `%${search}%`}
-            }
+            },
+            order: [['createdAt', order]]
         })
 
         // limpar os dados do array e pegar somente os pensamentos
