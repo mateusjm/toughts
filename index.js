@@ -61,7 +61,7 @@ app.use(
 app.use(flash())
 
 // uso de arquivo estáticos
-app.use(express.static('public'))
+app.use(express.static(__dirname + '../../' + '/public'))
 
 // configurar sessão na resposta
 app.use((req, res, next)=> {
